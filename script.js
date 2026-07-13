@@ -1,12 +1,10 @@
-/* ==========================================================================
-   DADOS DOS CAVALOS
+/* DADOS DOS CAVALOS
    Para adicionar/remover um cavalo, basta editar esta lista.
    - numero: número do cavalo no páreo
    - nome: nome do cavalo
    - joquei: nome do jóquei
    - odd: cotação (multiplica o valor apostado se o cavalo ganhar)
-   - cor: cor da "sedinha" do jóquei (usada na borda do cartão)
-   ========================================================================== */
+   - cor: cor da "sedinha" do jóquei (usada na borda do cartão) */
 const cavalos = [
   {
     numero: 1,
@@ -66,28 +64,22 @@ const cavalos = [
   },
 ];
 
-/* ==========================================================================
-   DADOS DAS CADEIRAS
+/* DADOS DAS CADEIRAS
    Fileiras de A a E, com 10 cadeiras cada.
-   Algumas cadeiras já começam "ocupadas" para simular uma arquibancada real.
-   ========================================================================== */
+   Algumas cadeiras já começam "ocupadas" para simular uma arquibancada real. */
 const fileiras = ["A", "B", "C", "D", "E"];
 const cadeirasPorFileira = 10;
 
 // lista de cadeiras que já nascem ocupadas (edite como quiser)
 const cadeirasOcupadas = ["A3", "A4", "B7", "C1", "C2", "D9", "E5", "E6"];
 
-/* ==========================================================================
-   ESTADO DA APLICAÇÃO
-   Guarda o que o cliente já escolheu até agora.
-   ========================================================================== */
+/* ESTADO DA APLICAÇÃO
+   Guarda o que o cliente já escolheu até agora.*/
 let cavaloSelecionado = null; // vai guardar o objeto do cavalo escolhido
 let cadeiraSelecionada = null; // vai guardar o texto da cadeira, ex: "B5"
 let numeroDoBilhete = 1;
 
-/* ==========================================================================
-   REFERÊNCIAS AOS ELEMENTOS DO HTML
-   ========================================================================== */
+/* REFERÊNCIAS AOS ELEMENTOS DO HTML*/
 const horseGrid = document.getElementById("horse-grid");
 const seatMap = document.getElementById("seat-map");
 
@@ -103,9 +95,7 @@ const betForm = document.getElementById("bet-form");
 const ticketList = document.getElementById("ticket-list");
 const ticketVazio = document.getElementById("ticket-vazio");
 
-/* ==========================================================================
-   CRIAR OS CARTÕES DE CAVALO NA TELA
-   ========================================================================== */
+/* CRIAR OS CARTÕES DE CAVALO NA TELA */
 function montarCavalos() {
   cavalos.forEach((cavalo) => {
     const card = document.createElement("div");
@@ -138,9 +128,7 @@ function selecionarCavalo(cavalo, cardClicado) {
   atualizarBilhete();
 }
 
-/* ==========================================================================
-   CRIAR O MAPA DE CADEIRAS NA TELA
-   ========================================================================== */
+/* CRIAR O MAPA DE CADEIRAS NA TELA */
 function montarCadeiras() {
   fileiras.forEach((fileira) => {
     const linha = document.createElement("div");
@@ -187,9 +175,7 @@ function selecionarCadeira(codigoCadeira, botaoClicado) {
   atualizarBilhete();
 }
 
-/* ==========================================================================
-   ATUALIZAR O BILHETE DE APOSTA (painel do lado direito)
-   ========================================================================== */
+/* ATUALIZAR O BILHETE DE APOSTA (painel do lado direito) */
 function atualizarBilhete() {
   betHorse.textContent = cavaloSelecionado
     ? `Nº ${cavaloSelecionado.numero} — ${cavaloSelecionado.nome}`
@@ -215,9 +201,7 @@ function formatarMoeda(valor) {
   return "R$ " + valor.toFixed(2).replace(".", ",");
 }
 
-/* ==========================================================================
-   CONFIRMAR A APOSTA
-   ========================================================================== */
+/*CONFIRMAR A APOSTA*/
 function confirmarAposta() {
   betErro.textContent = "";
 
@@ -286,9 +270,7 @@ function resetarSelecao() {
   atualizarBilhete();
 }
 
-/* ==========================================================================
-   EVENTOS
-   ========================================================================== */
+/* EVENTOS */
 betAmount.addEventListener("input", calcularRetorno);
 
 // prevenir reload do form: tratar submissão do form e chamar confirmarAposta
@@ -302,9 +284,7 @@ if (betForm) {
   btnConfirmar.addEventListener("click", confirmarAposta);
 }
 
-/* ==========================================================================
-   INICIALIZAÇÃO
-   ========================================================================== */
+/* INICIALIZAÇÃO */
 montarCavalos();
 montarCadeiras();
 atualizarBilhete();
