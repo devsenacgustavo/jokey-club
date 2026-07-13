@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jockey Club Turfe Real</title>
+    <meta
+      name="description"
+      content="Simulador de apostas do Jockey Club — escolha cavalo, cadeira e confirme sua aposta (fictício)."
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ffffff'/%3E%3Ctext x='50' y='56' font-size='50' text-anchor='middle' font-family='Bebas Neue, sans-serif' fill='%23000'%3E%F0%9F%8F%8E%3C/text%3E%3C/svg%3E"
+    />
+
+    <!-- Fontes do Google: uma condensada para números/títulos (estilo placar de turfe)
+       e uma serifada para o restante do texto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bitter:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ===== CABEÇALHO ===== -->
+    <header class="header">
+      <div class="header-inner">
+        <p class="header-kicker">Reunião de hoje &middot; 8 páreos</p>
+        <h1 class="header-title">JOCKEY CLUB <span>TURFE REAL</span></h1>
+        <p class="header-sub">
+          Escolha seu cavalo, sua cadeira e faça sua aposta
+        </p>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- ===== ETAPA 1: ESCOLHER O CAVALO ===== -->
+      <section class="section" id="secao-cavalos">
+        <div class="section-title">
+          <span class="section-number">1</span>
+          <div>
+            <h2>Escolha o cavalo</h2>
+            <p>
+              Cada cavalo mostra o número, o nome, o jóquei e a cotação (odd) do
+              páreo
+            </p>
+          </div>
+        </div>
+
+        <div class="horse-grid" id="horse-grid">
+          <!-- os cartões de cavalo são criados pelo JavaScript (script.js) -->
+        </div>
+      </section>
+
+      <!-- ===== ETAPA 2: ESCOLHER A CADEIRA ===== -->
+      <section class="section" id="secao-cadeiras">
+        <div class="section-title">
+          <span class="section-number">2</span>
+          <div>
+            <h2>Escolha sua cadeira</h2>
+            <p>
+              Cadeiras cinzas estão ocupadas. Clique em uma cadeira livre para
+              selecionar a sua
+            </p>
+          </div>
+        </div>
+
+        <div class="seat-legend">
+          <span class="legend-item"
+            ><i class="legend-box seat-livre"></i> Livre</span
+          >
+          <span class="legend-item"
+            ><i class="legend-box seat-selecionada"></i> Selecionada</span
+          >
+          <span class="legend-item"
+            ><i class="legend-box seat-ocupada"></i> Ocupada</span
+          >
+        </div>
+
+        <div class="track-label">🏇 PISTA 🏇</div>
+
+        <div class="seat-map" id="seat-map">
+          <!-- as fileiras de cadeiras são criadas pelo JavaScript (script.js) -->
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== BILHETE DE APOSTA (fixo no canto, estilo recibo de papel) ===== -->
+    <aside
+      class="bet-slip"
+      id="bet-slip"
+      role="region"
+      aria-labelledby="bet-slip-title"
+    >
+      <div class="bet-slip-inner">
+        <h3 class="bet-slip-title" id="bet-slip-title">Seu bilhete</h3>
+
+        <form id="bet-form">
+          <div class="bet-slip-row">
+            <span class="bet-slip-label">Cavalo</span>
+            <span class="bet-slip-value" id="bet-horse"
+              >— nenhum selecionado —</span
+            >
+          </div>
+
+          <div class="bet-slip-row">
+            <span class="bet-slip-label">Jóquei</span>
+            <span class="bet-slip-value" id="bet-jockey">—</span>
+          </div>
+
+          <div class="bet-slip-row">
+            <span class="bet-slip-label">Cadeira</span>
+            <span class="bet-slip-value" id="bet-seat"
+              >— nenhuma selecionada —</span
+            >
+          </div>
+
+          <div class="bet-slip-divider"></div>
+
+          <label class="bet-slip-amount-label" for="bet-amount"
+            >Valor da aposta (R$)</label
+          >
+          <input
+            type="number"
+            id="bet-amount"
+            class="bet-slip-input"
+            min="1"
+            step="1"
+            value="10"
+            aria-describedby="bet-erro"
+          />
+
+          <div class="bet-slip-row bet-slip-payout">
+            <span class="bet-slip-label">Retorno possível</span>
+            <span
+              class="bet-slip-value"
+              id="bet-payout"
+              role="status"
+              aria-live="polite"
+              >R$ 0,00</span
+            >
+          </div>
+
+          <button class="bet-slip-button" id="btn-confirmar" type="submit">
+            Confirmar aposta
+          </button>
+          <p
+            class="bet-slip-erro"
+            id="bet-erro"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          ></p>
+        </form>
+      </div>
+    </aside>
+
+    <!-- ===== LISTA DE BILHETES JÁ CONFIRMADOS ===== -->
+    <section class="section section-tickets">
+      <div class="section-title">
+        <span class="section-number">3</span>
+        <div>
+          <h2>Seus bilhetes confirmados</h2>
+          <p>Aqui aparecem todas as apostas que você já fechou</p>
+        </div>
+      </div>
+      <div class="ticket-list" id="ticket-list">
+        <p class="ticket-vazio" id="ticket-vazio">
+          Você ainda não confirmou nenhuma aposta.
+        </p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Jockey Club Turfe Real — projeto de estudo, apostas fictícias 🐎</p>
+    </footer>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
