@@ -143,6 +143,14 @@ body {
   transform: translateY(-4px);
 }
 
+.horse-card:focus-visible,
+.seat:focus-visible,
+.bet-slip-button:focus-visible,
+.bet-slip-input:focus-visible {
+  outline: 3px solid var(--dourado);
+  outline-offset: 2px;
+}
+
 .horse-card.selecionado {
   outline: 3px solid var(--dourado);
   outline-offset: 3px;

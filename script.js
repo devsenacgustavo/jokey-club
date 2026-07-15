@@ -77,7 +77,7 @@ const cadeirasOcupadas = ["A3", "A4", "B7", "C1", "C2", "D9", "E5", "E6"];
    Guarda o que o cliente já escolheu até agora.*/
 let cavaloSelecionado = null; // vai guardar o objeto do cavalo escolhido
 let cadeiraSelecionada = null; // vai guardar o texto da cadeira, ex: "B5"
-let numeroDoBilhete = 1;
+let proximoNumeroBilhete = 1;
 
 /* REFERÊNCIAS AOS ELEMENTOS DO HTML*/
 const horseGrid = document.getElementById("horse-grid");
@@ -94,6 +94,18 @@ const betForm = document.getElementById("bet-form");
 
 const ticketList = document.getElementById("ticket-list");
 const ticketVazio = document.getElementById("ticket-vazio");
+
+function limparSelecaoCavalos() {
+  document.querySelectorAll(".horse-card").forEach((card) => {
+    card.classList.remove("selecionado");
+  });
+}
+
+function limparSelecaoCadeiras() {
+  document.querySelectorAll(".seat:not(.ocupada)").forEach((botao) => {
+    botao.classList.remove("selecionada");
+  });
+}
 
 /* CRIAR OS CARTÕES DE CAVALO NA TELA */
 function montarCavalos() {
@@ -119,10 +131,7 @@ function montarCavalos() {
 function selecionarCavalo(cavalo, cardClicado) {
   cavaloSelecionado = cavalo;
 
-  // remove o destaque de qualquer outro cartão e destaca só o clicado
-  document
-    .querySelectorAll(".horse-card")
-    .forEach((c) => c.classList.remove("selecionado"));
+  limparSelecaoCavalos();
   cardClicado.classList.add("selecionado");
 
   atualizarBilhete();
@@ -166,10 +175,7 @@ function montarCadeiras() {
 function selecionarCadeira(codigoCadeira, botaoClicado) {
   cadeiraSelecionada = codigoCadeira;
 
-  // remove o destaque de qualquer outra cadeira livre e destaca só a clicada
-  document
-    .querySelectorAll(".seat:not(.ocupada)")
-    .forEach((s) => s.classList.remove("selecionada"));
+  limparSelecaoCadeiras();
   botaoClicado.classList.add("selecionada");
 
   atualizarBilhete();
@@ -214,13 +220,13 @@ function confirmarAposta() {
     return;
   }
 
-  const valor = parseFloat(betAmount.value);
-  if (!valor || valor <= 0) {
+  const valorAposta = parseFloat(betAmount.value);
+  if (!valorAposta || valorAposta <= 0) {
     betErro.textContent = "Digite um valor de aposta válido.";
     return;
   }
 
-  criarTicket(cavaloSelecionado, cadeiraSelecionada, valor);
+  criarTicket(cavaloSelecionado, cadeiraSelecionada, valorAposta);
   marcarCadeiraComoOcupada(cadeiraSelecionada);
   resetarSelecao();
 }
@@ -229,21 +235,21 @@ function criarTicket(cavalo, cadeira, valor) {
   // some com a mensagem de "nenhuma aposta ainda", se ela existir
   if (ticketVazio) ticketVazio.remove();
 
-  const retorno = valor * cavalo.odd;
+  const retornoEsperado = valor * cavalo.odd;
 
   const ticket = document.createElement("div");
   ticket.className = "ticket-card";
   ticket.innerHTML = `
-    <h4>Bilhete #${String(numeroDoBilhete).padStart(3, "0")}</h4>
+    <h4>Bilhete #${String(proximoNumeroBilhete).padStart(3, "0")}</h4>
     <p><b>Cavalo:</b> Nº ${cavalo.numero} — ${cavalo.nome}</p>
     <p><b>Jóquei:</b> ${cavalo.joquei}</p>
     <p><b>Cadeira:</b> Fileira ${cadeira[0]}, cadeira ${cadeira.slice(1)}</p>
     <p><b>Valor apostado:</b> ${formatarMoeda(valor)}</p>
-    <p><b>Retorno se ganhar:</b> ${formatarMoeda(retorno)}</p>
+    <p><b>Retorno se ganhar:</b> ${formatarMoeda(retornoEsperado)}</p>
   `;
 
   ticketList.appendChild(ticket);
-  numeroDoBilhete++;
+  proximoNumeroBilhete++;
 }
 
 function marcarCadeiraComoOcupada(codigoCadeira) {
@@ -262,9 +268,8 @@ function resetarSelecao() {
   cavaloSelecionado = null;
   cadeiraSelecionada = null;
 
-  document
-    .querySelectorAll(".horse-card")
-    .forEach((c) => c.classList.remove("selecionado"));
+  limparSelecaoCavalos();
+  limparSelecaoCadeiras();
 
   betAmount.value = 10;
   atualizarBilhete();
